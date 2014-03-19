@@ -43,7 +43,7 @@ public class Client
 	public static void testPool(HighTunes hT) throws RemoteException
 	{
 		hell = hT.connexionV2("Toto");
-		
+		System.out.println(hell);
 		hell.setName("Toto");
 		System.out.println(hell.ditBonjour());
 		

@@ -1,7 +1,7 @@
-package fr.polytech.ws;
 
 import java.util.Scanner;
 import javax.xml.ws.Endpoint;
+import fr.polytech.ws.Hello;
 
 public class Lanceur
 {
