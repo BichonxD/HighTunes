@@ -34,7 +34,7 @@ public class HelloImpl implements Hello
 		}
 	}
 
-	public void init()
+	public void reInit() throws RemoteException
 	{
 		name = null;
 	}
@@ -43,4 +43,5 @@ public class HelloImpl implements Hello
 	{
 		this.name = name;
 	}
+	
 }

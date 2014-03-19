@@ -58,7 +58,7 @@ public class Pool<RemoteType extends Remote & Poolable, ImplType extends RemoteT
 	}
 	
 	@SuppressWarnings("unchecked")
-	public RemoteType getNewElt() throws ErreurPool
+	public RemoteType getNewElt() throws ErreurPool, RemoteException
 	{
 		if (!existeLibre())
 			throw new PoolPleine();
@@ -66,29 +66,27 @@ public class Pool<RemoteType extends Remote & Poolable, ImplType extends RemoteT
 		{
 			ImplType eltADonner = libre.pop();
 			RemoteType sEltADonner;
-			try
-			{
-				sEltADonner = (RemoteType) UnicastRemoteObject.exportObject(eltADonner, 0);
-			} catch (RemoteException e)
-			{
-				throw new ErreurPool("RemoteException.");
-			}
+			sEltADonner = (RemoteType) UnicastRemoteObject.exportObject(eltADonner, 0);
 			utilise.put(sEltADonner, eltADonner);
-			System.out.println(sEltADonner);
+			
 			return sEltADonner;
 		}
 	}
 	
-	public void libereElt(RemoteType elt)
+	public void libereElt(RemoteType elt) throws RemoteException
 	{
 		if (elt != null && utilise.containsKey(elt))
 		{
-			libre.push(utilise.get(elt));
-			utilise.get(elt).init();
+			ImplType impl = utilise.get(elt);
+			libre.push(impl);
+			
+			utilise.get(elt).reInit();
+			
 			utilise.remove(elt);
+			
 			try
 			{
-				UnicastRemoteObject.unexportObject(elt, true);
+				UnicastRemoteObject.unexportObject(impl, true);
 			} catch (NoSuchObjectException e)
 			{
 			}

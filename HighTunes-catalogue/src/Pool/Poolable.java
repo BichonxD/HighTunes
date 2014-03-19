@@ -1,6 +1,8 @@
 package Pool;
 
+import java.rmi.RemoteException;
+
 public interface Poolable
 {
-	public void init();
+	public void reInit() throws RemoteException;
 }

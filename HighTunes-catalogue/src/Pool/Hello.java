@@ -7,4 +7,5 @@ public interface Hello extends Remote, Poolable
 {
 	public String ditBonjour() throws RemoteException;
 	public void setName(String name) throws RemoteException;
+	public void reInit() throws RemoteException;
 }

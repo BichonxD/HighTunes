@@ -20,7 +20,7 @@ public interface HighTunes extends Remote
 	public String catalogueToString() throws RemoteException;
 	public String panierToString(int idUtilisateur) throws RemoteException;
 	
-	public Hello connexionV2(String name) throws RemoteException;
+	public Hello connexionV2() throws RemoteException;
 	public void deconnexionV2(Hello h) throws RemoteException;
 	
 }

@@ -119,7 +119,7 @@ public class HighTunesImpl implements HighTunes
 		return ret;
 	}
 
-	public Hello connexionV2(String name) throws RemoteException
+	public Hello connexionV2() throws RemoteException
 	{
 		try
 		{
