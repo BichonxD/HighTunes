@@ -1,0 +1,27 @@
+<?xml version="1.0" standalone="yes"?>
+
+<project basedir="." default="compile">
+	<import file="../_COMMUN/_ant/ant.xml"/>
+	<!-- 
+		PROPRIETES à adapter
+	-->
+  	<property name="schema" value="commande.xsd" /> 	
+ 	<property name="binding" value="" />
+	
+  	<target name="compile">
+    	<echo message="Compiling the schema..." />
+  		
+  		<!--
+    	<xjc schema="${schema}" destdir="src" binding="${binding}" >
+      		<produces dir="src" includes="**/*.java" />
+    	</xjc>
+    	-->
+  		
+    	<xjc schema="${schema}" destdir="src">
+      		<produces dir="src" includes="**/*.java" />
+    	</xjc>
+  		
+  	</target>
+	
+</project>
+

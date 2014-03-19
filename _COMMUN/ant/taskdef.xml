@@ -1,0 +1,36 @@
+<?xml version="1.0" standalone="yes"?>
+
+<project basedir=".">
+	<!-- PROPRIETES à adapter -->
+	<property name="jdk.home" value="/usr/lib/jvm/java-6-openjdk" />
+	<property name="jaxws.home" value="/home/bichon/CoursInfo/ArchiDistr/HighTunes/_COMMUN/jaxws-ri" />
+	
+	<path id="classpath">
+		<fileset dir="${jdk.home}" includes="lib/*.jar" />
+		<fileset dir="${jaxws.home}" includes="*.jar" />
+	</path>
+
+	<path id="classpath">
+		<fileset dir="${jdk.home}" includes="lib/*.jar" />
+		<fileset dir="${jaxws.home}" includes="*.jar" />
+	</path>
+
+	<taskdef name="schemagen" classname="com.sun.tools.jxc.SchemaGenTask">
+	    <classpath refid="classpath" />
+	</taskdef>
+	
+	<taskdef name="xjc" classname="com.sun.tools.xjc.XJCTask">
+	    <classpath refid="classpath" />
+	</taskdef>
+	
+	<taskdef name="wsimport" classname="com.sun.tools.ws.ant.WsImport">
+	    <classpath refid="classpath" />
+	</taskdef>
+
+	<taskdef name="wsgen" classname="com.sun.tools.ws.ant.WsGen">
+	    <classpath refid="classpath" />
+	</taskdef>
+
+
+</project>
+
