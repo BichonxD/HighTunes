@@ -1,23 +1,26 @@
-package HighTunes;
+package Panier;
+
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class Panier
+import HighTunes.Article;
+import HighTunes.ArticleInexistant;
+
+public class PanierImpl implements Panier
 {
-	private int idUtilisateur;
 	private ArrayList<Article> articlePanier;
 	// HashMap contenant la cle d'un article et le nombre de cet article dans le panier.
 	private HashMap<Integer, Integer> nbArticle;
 	private static int currentNbCommande = 0;
 	
-	public Panier(int idUtilisateur)
+	public PanierImpl(int idUtilisateur)
 	{
-		this.idUtilisateur = idUtilisateur;
 		articlePanier = new ArrayList<Article>();
 		nbArticle = new HashMap<Integer, Integer>();
 	}
 	
-	public void addToPanier(Article art, int quantite) throws ArticleInexistant
+	public void addToPanier(Article art, int quantite) throws RemoteException, ArticleInexistant
 	{
 		if (art != null && quantite > 0)
 		{
@@ -40,7 +43,7 @@ public class Panier
 	 * 
 	 * @param art
 	 */
-	public void addToPanier(Article art) throws ArticleInexistant
+	public void addToPanier(Article art) throws RemoteException, ArticleInexistant
 	{
 		addToPanier(art, 1);
 	}
@@ -51,7 +54,7 @@ public class Panier
 	 * @param art
 	 * @param nb
 	 */
-	public void modifierQuantite(Article art, int nb) throws ErreurPanier
+	public void modifierQuantite(Article art, int nb) throws RemoteException, ErreurPanier
 	{
 		if (articlePanier.contains(art) && nbArticle.containsKey(art.getCle()))
 			nbArticle.put(art.getCle(), nb);
@@ -64,7 +67,7 @@ public class Panier
 	 * 
 	 * @param art
 	 */
-	public void suppressionArticle(Article art)
+	public void suppressionArticle(Article art) throws RemoteException
 	{
 		if (articlePanier.contains(art) && nbArticle.containsKey(art.getCle()))
 		{
@@ -73,13 +76,13 @@ public class Panier
 		}
 	}
 	
-	public void viderPanier()
+	public void viderPanier() throws RemoteException
 	{
 		articlePanier.removeAll(articlePanier);
 		nbArticle.clear();
 	}
 	
-	public float calculCoutPanier()
+	public float calculCoutPanier() throws RemoteException
 	{
 		float result = 0;
 		
@@ -91,7 +94,7 @@ public class Panier
 		return result;
 	}
 	
-	public String commander() throws ErreurPanier
+	public String commander() throws RemoteException, ErreurPanier
 	{
 		if (!articlePanier.isEmpty())
 		{
@@ -107,20 +110,20 @@ public class Panier
 		return currentNbCommande++;
 	}
 	
-	public int getIdUtilisateur()
-	{
-		return idUtilisateur;
-	}
-	
 	public String toString()
 	{
-		String ret = "Panier de l'utilisateur " + idUtilisateur + "\nListe des articles\n----------\n";
+		String ret = "\nListe des articles\n----------\n";
 		for (Article art : articlePanier)
 		{
 			ret += art.toString() + " Quantité : " + nbArticle.get(art.getCle()) + "\n";
 		}
 		
 		return ret;
+	}
+
+	public void reInit() throws RemoteException
+	{
+		viderPanier();
 	}
 	
 }

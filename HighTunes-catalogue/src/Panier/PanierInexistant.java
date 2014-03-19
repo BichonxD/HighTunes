@@ -1,7 +1,7 @@
-package HighTunes;
+package Panier;
 import java.rmi.RemoteException;
 
-public class ErreurPanier extends RemoteException
+public class PanierInexistant extends RemoteException
 {
 	private static final long serialVersionUID = 1L;	
 }

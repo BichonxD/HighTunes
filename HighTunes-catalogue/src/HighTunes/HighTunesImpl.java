@@ -1,30 +1,25 @@
 package HighTunes;
-import java.rmi.*;
-import java.util.HashMap;
-import java.util.Map.Entry;
 
+import java.rmi.*;
+import Panier.*;
 import Pool.*;
 
 public class HighTunesImpl implements HighTunes
 {
 	private static HighTunesImpl instance = new HighTunesImpl();
 	private Catalogue cat;
-	private HashMap<Integer, Panier> listePaniers;
 	private static int currentID = 0;
-	
-	private Pool<Hello, HelloImpl> pHello;
+	private Pool<Panier, PanierImpl> poolPanier;
 	
 	private HighTunesImpl()
 	{
 		cat = Catalogue.getInstance();
-		listePaniers = new HashMap<Integer, Panier>();
 		
 		try
 		{
-			pHello = new Pool<Hello, HelloImpl>(10, HelloImpl.class);
+			poolPanier = new Pool<Panier, PanierImpl>(10, PanierImpl.class);
 		} catch (ErreurPool e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -41,15 +36,7 @@ public class HighTunesImpl implements HighTunes
 	
 	public int connexion() throws RemoteException
 	{
-		int id = getNewID();
-		listePaniers.put(id, new Panier(id));
-		return id;
-	}
-	
-	public void deconnexion(int id) throws RemoteException
-	{
-		listePaniers.get(id).viderPanier();
-		listePaniers.remove(id);
+		return getNewID();
 	}
 	
 	public Article getArticle(int cle) throws RemoteException, ArticleInexistant
@@ -61,69 +48,12 @@ public class HighTunesImpl implements HighTunes
 	{
 		return cat.getNbTotalArticle();
 	}
-	
-	public void addToPanier(int idUser, Article art, int quantite) throws RemoteException, ArticleInexistant
-	{
-		listePaniers.get(idUser).addToPanier(art, quantite);
-	}
-	
-	public void addToPanier(int idUser, Article art) throws RemoteException, ArticleInexistant
-	{
-		listePaniers.get(idUser).addToPanier(art);
-	}
-	
-	public float calculCoutPanier(int idUser) throws RemoteException
-	{
-		return listePaniers.get(idUser).calculCoutPanier();
-	}
-	
-	public String commander(int idUser) throws RemoteException, ErreurPanier
-	{
-		return listePaniers.get(idUser).commander();
-	}
-	
-	public void modifierQuantite(int idUser, Article art, int nb) throws RemoteException, ErreurPanier
-	{
-		listePaniers.get(idUser).modifierQuantite(art, nb);
-	}
-	
-	public void suppressionArticle(int idUser, Article art) throws RemoteException
-	{
-		listePaniers.get(idUser).suppressionArticle(art);
-	}
-	
-	public void viderPanier(int idUser) throws RemoteException
-	{
-		listePaniers.get(idUser).viderPanier();
-	}
-	
-	public String catalogueToString() throws RemoteException
-	{
-		return cat.toString();
-	}
-	
-	public String panierToString(int idUtilisateur) throws RemoteException
-	{
-		return listePaniers.get(idUtilisateur).toString();
-	}
-	
-	public String toString()
-	{
-		String ret = "HighTunes\n--------------------\n";
-		cat.toString();
-		for (Entry<Integer, Panier> ent : listePaniers.entrySet())
-		{
-			ret += ent.getValue().toString() + "\n";
-		}
-		
-		return ret;
-	}
 
-	public Hello connexionV2() throws RemoteException
+	public Panier getPanier() throws RemoteException
 	{
 		try
 		{
-			return pHello.getNewElt();
+			return poolPanier.getNewElt();
 		}
 		catch (ErreurPool e)
 		{
@@ -131,9 +61,16 @@ public class HighTunesImpl implements HighTunes
 		}
 	}
 
-	public void deconnexionV2(Hello h) throws RemoteException
+	public void libererPanier(Panier h) throws RemoteException
 	{
-		pHello.libereElt(h);
+		poolPanier.libereElt(h);
+	}
+	
+	public String toString()
+	{
+		String ret = "Catalogue de HighTunes\n--------------------\n";
+		cat.toString();
+		return ret;
 	}
 	
 }
