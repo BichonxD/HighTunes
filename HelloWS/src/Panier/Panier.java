@@ -1,35 +1,34 @@
 package Panier;
 
-import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
-
 import HighTunes.Article;
 import HighTunes.ArticleInexistant;
 
-public class PanierImpl implements Panier
+public class Panier
 {
+	private int idUtilisateur;
 	private ArrayList<Article> articlePanier;
 	// HashMap contenant la cle d'un article et le nombre de cet article dans le panier.
 	private HashMap<Integer, Integer> nbArticle;
 	private static int currentNbCommande = 0;
 	
-	public PanierImpl()
+	public Panier()
 	{
+		this.idUtilisateur = 0;
 		articlePanier = new ArrayList<Article>();
 		nbArticle = new HashMap<Integer, Integer>();
 	}
 	
-	public void addToPanier(Article art, int quantite) throws RemoteException, ArticleInexistant
+	public void addToPanier(Article art, int quantite) throws ArticleInexistant
 	{
 		if (art != null && quantite > 0)
 		{
-			if(articlePanier.contains(art))
+			if (articlePanier.contains(art))
 			{
 				int qttActuelle = nbArticle.get(art.getCle());
 				nbArticle.put(art.getCle(), qttActuelle + quantite);
-			}
-			else
+			} else
 			{
 				articlePanier.add(art);
 				nbArticle.put(art.getCle(), quantite);
@@ -43,7 +42,7 @@ public class PanierImpl implements Panier
 	 * 
 	 * @param art
 	 */
-	public void addToPanier(Article art) throws RemoteException, ArticleInexistant
+	public void addToPanier(Article art) throws ArticleInexistant
 	{
 		addToPanier(art, 1);
 	}
@@ -54,7 +53,7 @@ public class PanierImpl implements Panier
 	 * @param art
 	 * @param nb
 	 */
-	public void modifierQuantite(Article art, int nb) throws RemoteException, ErreurPanier
+	public void modifierQuantite(Article art, int nb) throws ErreurPanier
 	{
 		if (articlePanier.contains(art) && nbArticle.containsKey(art.getCle()))
 			nbArticle.put(art.getCle(), nb);
@@ -67,7 +66,7 @@ public class PanierImpl implements Panier
 	 * 
 	 * @param art
 	 */
-	public void suppressionArticle(Article art) throws RemoteException
+	public void suppressionArticle(Article art)
 	{
 		if (articlePanier.contains(art) && nbArticle.containsKey(art.getCle()))
 		{
@@ -76,13 +75,13 @@ public class PanierImpl implements Panier
 		}
 	}
 	
-	public void viderPanier() throws RemoteException
+	public void viderPanier()
 	{
 		articlePanier.removeAll(articlePanier);
 		nbArticle.clear();
 	}
 	
-	public float calculCoutPanier() throws RemoteException
+	public float calculCoutPanier()
 	{
 		float result = 0;
 		
@@ -94,11 +93,11 @@ public class PanierImpl implements Panier
 		return result;
 	}
 	
-	public String commander() throws RemoteException, ErreurPanier
+	public String commander() throws ErreurPanier
 	{
 		if (!articlePanier.isEmpty())
 		{
-			String ret = "Commande " + getnewNbCommande() + " passée avec les articles :\n" + this.contenuToString();
+			String ret = "Commande " + getnewNbCommande() + " passée avec les articles :\n" + this.toString();
 			viderPanier();
 			return ret;
 		} else
@@ -110,9 +109,14 @@ public class PanierImpl implements Panier
 		return currentNbCommande++;
 	}
 	
-	public String contenuToString()throws RemoteException
+	public int getIdUtilisateur()
 	{
-		String ret = "\nListe des articles\n----------\n";
+		return idUtilisateur;
+	}
+	
+	public String toString()
+	{
+		String ret = "Panier de l'utilisateur " + idUtilisateur + "\nListe des articles\n----------\n";
 		for (Article art : articlePanier)
 		{
 			ret += art.toString() + " Quantité : " + nbArticle.get(art.getCle()) + "\n";
@@ -120,10 +124,40 @@ public class PanierImpl implements Panier
 		
 		return ret;
 	}
-
-	public void reInit() throws RemoteException
+	
+	public ArrayList<Article> getArticlePanier()
 	{
-		viderPanier();
+		return articlePanier;
+	}
+	
+	public static int getCurrentNbCommande()
+	{
+		return currentNbCommande;
+	}
+	
+	public HashMap<Integer, Integer> getNbArticle()
+	{
+		return nbArticle;
+	}
+	
+	public void setIdUtilisateur(int idUtilisateur)
+	{
+		this.idUtilisateur = idUtilisateur;
+	}
+	
+	public void setNbArticle(HashMap<Integer, Integer> nbArticle)
+	{
+		this.nbArticle = nbArticle;
+	}
+	
+	public void setArticlePanier(ArrayList<Article> articlePanier)
+	{
+		this.articlePanier = articlePanier;
+	}
+	
+	public static void setCurrentNbCommande(int currentNbCommande)
+	{
+		Panier.currentNbCommande = currentNbCommande;
 	}
 	
 }

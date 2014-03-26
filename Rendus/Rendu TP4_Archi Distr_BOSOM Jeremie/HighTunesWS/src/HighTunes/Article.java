@@ -1,30 +1,21 @@
 package HighTunes;
 
-import java.io.Serializable;
 import java.util.Date;
 
-public class Article implements Serializable
-{
-	private static final long serialVersionUID = 1L;
-	
+public class Article
+{	
 	private int cle;
 	private static int currentCle = 0;
 	private String description;
 	private float prix;
 	private Date dateDisponibilite;
 	
-	/**
-	 * @param description
-	 * @param prix
-	 * @param dateDisponibilite
-	 *            , est nulle si le produit est immediatement disponible
-	 */
-	public Article(String description, float prix, Date dateDisponibilite)
+	public Article()
 	{
 		cle = getnewCle();
-		this.description = description;
-		this.prix = prix;
-		this.dateDisponibilite = dateDisponibilite;
+		this.description = "Produit Non Initialisé";
+		this.prix = 0;
+		this.dateDisponibilite = null;
 	}
 	
 	private int getnewCle()
@@ -67,19 +58,45 @@ public class Article implements Serializable
 	
 	public boolean equals(Object obj)
 	{
-		if(obj == null)
+		if (obj == null)
 			return false;
 		
 		try
 		{
 			Article art = (Article) obj;
-			if(art.cle == this.cle)
+			if (art.cle == this.cle)
 				return true;
 			else
 				return false;
-		} catch(ClassCastException e)
+		} catch (ClassCastException e)
 		{
 			return false;
 		}
 	}
+	
+	public void setCle(int cle)
+	{
+		this.cle = cle;
+	}
+	
+	public static void setCurrentCle(int currentCle)
+	{
+		Article.currentCle = currentCle;
+	}
+	
+	public void setDateDisponibilite(Date dateDisponibilite)
+	{
+		this.dateDisponibilite = dateDisponibilite;
+	}
+	
+	public void setDescription(String description)
+	{
+		this.description = description;
+	}
+	
+	public void setPrix(float prix)
+	{
+		this.prix = prix;
+	}
+	
 }
